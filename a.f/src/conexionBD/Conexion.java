@@ -5,20 +5,23 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.swing.JOptionPane;
+
 public class Conexion {
-	//private Statement declaracion;
 	private static Statement declaracion;
+	
 	public Conexion() {
-		// TODO Auto-generated constructor stub
+		
 		try {
 			Connection conexion=DriverManager.getConnection("jdbc:mysql://localhost:3306/af", "root", "");
 			declaracion = conexion.createStatement();
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(null, "Error al conectar a la base de datos");
 			e.printStackTrace();
 		}
 	}
+	
 	public Statement getDeclaracion() {
 		return declaracion;
 	}
