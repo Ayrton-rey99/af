@@ -29,7 +29,7 @@ public class Ventana extends JFrame {
 	 */
 	public static void main(String[] args) {
 		try {
-            UIManager.setLookAndFeel("com.jtattoo.plaf.texture.TextureLookAndFeel");// com.jtattoo.plaf.mint.MintLookAndFeel
+            UIManager.setLookAndFeel("com.jtattoo.plaf.graphite.GraphiteLookAndFeel");// com.jtattoo.plaf.mint.MintLookAndFeel
 
         } catch (ClassNotFoundException ex1) {
             java.util.logging.Logger.getLogger(Ventana.class.getName()).log(java.util.logging.Level.SEVERE, null, ex1);
@@ -63,8 +63,8 @@ public class Ventana extends JFrame {
 		//
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(750, 600);
-		setMinimumSize(new Dimension(760,600));
+		setSize(800, 600);
+		setMinimumSize(new Dimension(800,600));
 		setLocationRelativeTo(null);
 		
 		JMenuBar menuBar = new JMenuBar();

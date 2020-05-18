@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.border.TitledBorder;
 import javax.swing.JButton;
 import java.awt.FlowLayout;
@@ -79,6 +80,7 @@ public class AnadirCliente extends JFrame {
 		panel_4.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
 		labelRazonSocial = new JLabel("Raz\u00F3n social");
+		labelRazonSocial.setFont(new Font("Tahoma", Font.BOLD, 11));
 		panel_4.add(labelRazonSocial);
 		
 		entradaRazonSocial = new JTextField();
@@ -202,11 +204,13 @@ public class AnadirCliente extends JFrame {
 		if(telefonoCorrecto && cuilCorrecto && emailCorrecto && razonSocialCorrecta) {
 			try {
 				statement.executeUpdate("INSERT INTO afweb_cliente values(null,'" +textoRazonSocial+ "','" +textoTelefono+ "'," + textoEmail + ",'" +textoCuil+ "')");
+				labelGuardado.setVisible(true);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(this,"El cliente \""+textoRazonSocial+"\" ya esta registrado.");
+				//e.printStackTrace();
 			}
-			labelGuardado.setVisible(true);
+			
 			borrarDatos();
 		}else {
 			// cambio los colores de los label en caso de que  algun dato sea incorrecto
