@@ -151,39 +151,6 @@ public class GestionaClientes extends JPanel {
 		fl_paginacion.setAlignment(FlowLayout.LEFT);
 		panel.add(paginacion, BorderLayout.SOUTH);
 		
-		JButton btnNewButton_6 = new JButton("");
-		paginacion.add(btnNewButton_6);
-		
-		JButton btnNewButton_7 = new JButton("");
-		paginacion.add(btnNewButton_7);
-		
-		JButton btnNewButton_9 = new JButton("");
-		paginacion.add(btnNewButton_9);
-		
-		JButton btnNewButton_10 = new JButton("");
-		paginacion.add(btnNewButton_10);
-		
-		JButton btnNewButton_11 = new JButton("");
-		paginacion.add(btnNewButton_11);
-		
-		JButton btnNewButton_12 = new JButton("");
-		paginacion.add(btnNewButton_12);
-		
-		JButton btnNewButton_13 = new JButton("");
-		paginacion.add(btnNewButton_13);
-		
-		JButton btnNewButton_14 = new JButton("");
-		paginacion.add(btnNewButton_14);
-		
-		JButton btnNewButton_15 = new JButton("");
-		paginacion.add(btnNewButton_15);
-		
-		JButton btnNewButton_16 = new JButton("");
-		paginacion.add(btnNewButton_16);
-		
-		JButton btnNewButton_17 = new JButton("");
-		paginacion.add(btnNewButton_17);
-		
 		JScrollPane scrollPane = new JScrollPane();
 		panel.add(scrollPane, BorderLayout.CENTER);
 		
@@ -304,9 +271,9 @@ public class GestionaClientes extends JPanel {
 	public void ponerBotones(Statement statement, int posicion) {
 		
 		// quito los botones si es que los hay
-//		if(paginacion.getComponentCount()!=0) {
-//			paginacion.removeAll();
-//		}
+		if(paginacion.getComponentCount()!=0) {
+			paginacion.removeAll();
+	}
 		
 		// obtengo la cantidad de registros
 		int cantidadDeRegistros=0;
@@ -393,29 +360,23 @@ public class GestionaClientes extends JPanel {
 		paginacion.setVisible(true);
 		
 	
-		botones=null;
 	}
 	class EventoBotonPaginacion extends MouseAdapter{
 		private Statement statement;
 		public EventoBotonPaginacion(Statement statement) {
 			// TODO Auto-generated constructor stub
 			this.statement=statement;
-			System.gc();
+			
 		}
 		@Override
 		public void mousePressed(MouseEvent e) {
 			// TODO Auto-generated method stub
 			ponerBotones(statement, Integer.parseInt(((JButton)e.getSource()).getText()));
+			System.gc();
 		}
 	}
 
 }
-
-
-
-
-
-
 
 
 
