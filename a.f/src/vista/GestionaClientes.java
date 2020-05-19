@@ -29,12 +29,13 @@ public class GestionaClientes extends JPanel {
 	private JTextField textField;
 	private AnadirCliente anadirCliente;
 	private JPanel paginacion;
-
+	private Statement statement;
 	/**
 	 * Create the panel.
 	 */
 	public GestionaClientes(Statement statement) {
 		//
+		this.statement=statement;
 		anadirCliente=new AnadirCliente(statement);
 		anadirCliente.setVisible(false);
 		
@@ -155,125 +156,19 @@ public class GestionaClientes extends JPanel {
 		panel.add(scrollPane, BorderLayout.CENTER);
 		
 		tabla = new JTable();
-		tabla.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null},
-			},
-			new String[] {
-				"New column", "New column", "New column", "New column", "New column", "New column", "New column"
-			}
-		));
 		scrollPane.setViewportView(tabla);
 		
-		// pongo los botones
-		ponerBotones(statement,1);
+		// pongo los botones y incribo las primeras 100 filas en la tabla
+		traerDatos(1);
+		ponerBotones(1);
 		
 	}
-	public void ponerBotones(Statement statement, int posicion) {
+	public void ponerBotones(int posicion) {
 		
 		// quito los botones si es que los hay
 		if(paginacion.getComponentCount()!=0) {
 			paginacion.removeAll();
-	}
+			}
 		
 		// obtengo la cantidad de registros
 		int cantidadDeRegistros=0;
@@ -282,6 +177,7 @@ public class GestionaClientes extends JPanel {
 			if(resultado.next()) {
 				cantidadDeRegistros=Integer.parseInt( resultado.getString("total"));
 			}
+			resultado=null;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -308,7 +204,7 @@ public class GestionaClientes extends JPanel {
 		// agrego el primer boton
 		if(posicion>=5) {
 			JButton primerBoton=new JButton("1");
-			primerBoton.addMouseListener(new EventoBotonPaginacion(statement));
+			primerBoton.addMouseListener(new EventoBotonPaginacion());
 			botones.add(primerBoton);
 			JButton separador=new JButton("...");
 			separador.setEnabled(false);
@@ -319,7 +215,7 @@ public class GestionaClientes extends JPanel {
 		for (int i = posicion-3; i < posicion; i++) {
 			if(i<1) continue;
 			JButton boton=new JButton(""+i);
-			boton.addMouseListener(new EventoBotonPaginacion(statement));
+			boton.addMouseListener(new EventoBotonPaginacion());
 			botones.add(boton);
 		}
 		
@@ -332,7 +228,7 @@ public class GestionaClientes extends JPanel {
 		for (int i = posicion+1; i <= posicion+3; i++) {
 			if(i>cantidadDeBotones) break;
 			JButton boton=new JButton(""+i);
-			boton.addMouseListener(new EventoBotonPaginacion(statement));
+			boton.addMouseListener(new EventoBotonPaginacion());
 			botones.add(boton);
 		}
 		//agrego el utlimo boton
@@ -341,7 +237,7 @@ public class GestionaClientes extends JPanel {
 			separador.setEnabled(false);
 			botones.add(separador);
 			JButton ultimoBoton=new JButton(""+cantidadDeBotones);
-			ultimoBoton.addMouseListener(new EventoBotonPaginacion(statement));
+			ultimoBoton.addMouseListener(new EventoBotonPaginacion());
 			botones.add(ultimoBoton);
 		}
 		
@@ -350,6 +246,9 @@ public class GestionaClientes extends JPanel {
 		for (JButton jButton : botones) {
 			paginacion.add(jButton);
 		}
+		// pongo la variable botones en null y llamo al recolector de basaura
+		botones=null;
+		System.gc();
 		// añado el label con la cantidad de registros
 		JLabel labelCantidadRegistros=new JLabel(cantidadDeRegistros+" Clientes");
 		labelCantidadRegistros.setBorder(new EmptyBorder(0, 10, 0, 0));
@@ -361,25 +260,55 @@ public class GestionaClientes extends JPanel {
 		
 	
 	}
-	class EventoBotonPaginacion extends MouseAdapter{
-		private Statement statement;
-		public EventoBotonPaginacion(Statement statement) {
-			// TODO Auto-generated constructor stub
-			this.statement=statement;
+	public void traerDatos(Integer numeroDePagina) {
+		int idPrimerRegistro = 0;
+		try {
+			// obtengo el id del primer registro
+			ResultSet resultado = statement.executeQuery("select id as primero from afweb_cliente order by id asc");
+			if(resultado.next()) {
+				idPrimerRegistro=Integer.parseInt( resultado.getString("primero"));
+			}
+			// obtengo las 100 filas
+			Integer desde=(idPrimerRegistro + (numeroDePagina*100)) -100;
+			Integer hasta= idPrimerRegistro +(numeroDePagina*100)-1;
+			ResultSet resulset=statement.executeQuery("select * from afweb_cliente where id BETWEEN "+desde+" and "+hasta	+"");
+			String[][] filasDeTabla=new String[100][5];
 			
+			for (int i = 0; i < filasDeTabla.length; i++) {
+				if(resulset.next()){
+					filasDeTabla[i][0]=resulset.getString("id"); 
+					filasDeTabla[i][1]=resulset.getString("razon_social"); 
+					filasDeTabla[i][2]=resulset.getString("telefono"); 
+					filasDeTabla[i][3]=resulset.getString("email"); 
+					filasDeTabla[i][4]=resulset.getString("cuil"); 
+				}
+			}
+			
+			tabla.setModel(new DefaultTableModel(
+					filasDeTabla,
+					new String[] {
+						"id", "Razón social", "Teléfono", "E-mail","Cuil"
+					}
+				));
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+	
+		//System.out.println("desde: " + desde + " hasta: " + hasta);
+		
+	}
+	
+	class EventoBotonPaginacion extends MouseAdapter{
 		@Override
 		public void mousePressed(MouseEvent e) {
 			// TODO Auto-generated method stub
-			ponerBotones(statement, Integer.parseInt(((JButton)e.getSource()).getText()));
-			System.gc();
+			Integer numeroDePagina=Integer.parseInt(((JButton)e.getSource()).getText());
+			ponerBotones(numeroDePagina);
+			traerDatos(numeroDePagina);
+			
 		}
 	}
 
 }
-
-
-
-
-
-
