@@ -2,7 +2,6 @@ package vista;
 
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
-
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.JButton;
@@ -12,12 +11,8 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import java.awt.FlowLayout;
 import javax.swing.ImageIcon;
-import java.awt.GridLayout;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -26,7 +21,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
-
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
@@ -157,6 +151,39 @@ public class GestionaClientes extends JPanel {
 		fl_paginacion.setAlignment(FlowLayout.LEFT);
 		panel.add(paginacion, BorderLayout.SOUTH);
 		
+		JButton btnNewButton_6 = new JButton("");
+		paginacion.add(btnNewButton_6);
+		
+		JButton btnNewButton_7 = new JButton("");
+		paginacion.add(btnNewButton_7);
+		
+		JButton btnNewButton_9 = new JButton("");
+		paginacion.add(btnNewButton_9);
+		
+		JButton btnNewButton_10 = new JButton("");
+		paginacion.add(btnNewButton_10);
+		
+		JButton btnNewButton_11 = new JButton("");
+		paginacion.add(btnNewButton_11);
+		
+		JButton btnNewButton_12 = new JButton("");
+		paginacion.add(btnNewButton_12);
+		
+		JButton btnNewButton_13 = new JButton("");
+		paginacion.add(btnNewButton_13);
+		
+		JButton btnNewButton_14 = new JButton("");
+		paginacion.add(btnNewButton_14);
+		
+		JButton btnNewButton_15 = new JButton("");
+		paginacion.add(btnNewButton_15);
+		
+		JButton btnNewButton_16 = new JButton("");
+		paginacion.add(btnNewButton_16);
+		
+		JButton btnNewButton_17 = new JButton("");
+		paginacion.add(btnNewButton_17);
+		
 		JScrollPane scrollPane = new JScrollPane();
 		panel.add(scrollPane, BorderLayout.CENTER);
 		
@@ -277,9 +304,9 @@ public class GestionaClientes extends JPanel {
 	public void ponerBotones(Statement statement, int posicion) {
 		
 		// quito los botones si es que los hay
-		if(paginacion.getComponentCount()!=0) {
-			paginacion.removeAll();
-		}
+//		if(paginacion.getComponentCount()!=0) {
+//			paginacion.removeAll();
+//		}
 		
 		// obtengo la cantidad de registros
 		int cantidadDeRegistros=0;
@@ -307,6 +334,7 @@ public class GestionaClientes extends JPanel {
 			}
 			
 		}
+
 		// array que almacena los botones
 		ArrayList<JButton> botones=new ArrayList<JButton>();
 		
@@ -363,12 +391,16 @@ public class GestionaClientes extends JPanel {
 		// refresco el panel para poder visualizar los cambios
 		paginacion.setVisible(false);
 		paginacion.setVisible(true);
+		
+	
+		botones=null;
 	}
 	class EventoBotonPaginacion extends MouseAdapter{
 		private Statement statement;
 		public EventoBotonPaginacion(Statement statement) {
 			// TODO Auto-generated constructor stub
 			this.statement=statement;
+			System.gc();
 		}
 		@Override
 		public void mousePressed(MouseEvent e) {

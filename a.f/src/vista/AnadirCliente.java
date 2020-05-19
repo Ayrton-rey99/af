@@ -26,8 +26,6 @@ import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import javax.swing.BoxLayout;
-
 public class AnadirCliente extends JFrame {
 
 	private JPanel contentPane;
