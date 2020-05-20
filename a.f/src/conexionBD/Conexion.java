@@ -8,7 +8,7 @@ import java.sql.Statement;
 import javax.swing.JOptionPane;
 
 public class Conexion {
-	private static Statement declaracion;
+	private  Statement declaracion;
 	
 	public Conexion() {
 		
@@ -24,6 +24,7 @@ public class Conexion {
 	
 	public Statement getDeclaracion() {
 		return declaracion;
+		
 	}
 		
 }

@@ -12,7 +12,6 @@ import javax.swing.border.TitledBorder;
 import javax.swing.JButton;
 import java.awt.FlowLayout;
 import javax.swing.ImageIcon;
-import java.awt.GridLayout;
 import javax.swing.JTextField;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -25,6 +24,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.BoxLayout;
 
 public class AnadirCliente extends JFrame {
 
@@ -38,7 +38,6 @@ public class AnadirCliente extends JFrame {
 	private JLabel labelTelefono;
 	private JLabel labelCuil;
 	private JLabel labelGuardado;
-	private JPanel campos;
 
 
 
@@ -47,6 +46,7 @@ public class AnadirCliente extends JFrame {
 	 * Create the frame.
 	 */
 	public AnadirCliente(Statement statement) {
+		setTitle("A\u00F1adir Cliente");
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -55,7 +55,8 @@ public class AnadirCliente extends JFrame {
 		});
 		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setSize(450, 300);
+		setSize(360, 360);
+		setResizable(false);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -68,20 +69,27 @@ public class AnadirCliente extends JFrame {
 		JLabel lblNewLabel = new JLabel("Cliente");
 		panel.add(lblNewLabel);
 		
-		campos = new JPanel();
+		JPanel campos = new JPanel();
 		campos.setBorder(new TitledBorder(null, "Campos", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		contentPane.add(campos, BorderLayout.CENTER);
-		campos.setLayout(new GridLayout(2, 2, 0, 0));
+		campos.setLayout(new BoxLayout(campos, BoxLayout.Y_AXIS));
 		
 		JPanel panel_4 = new JPanel();
 		campos.add(panel_4);
-		panel_4.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		panel_4.setLayout(new BorderLayout(0, 0));
+		
+		JPanel panel_1 = new JPanel();
+		panel_4.add(panel_1, BorderLayout.WEST);
 		
 		labelRazonSocial = new JLabel("Raz\u00F3n social");
+		panel_1.add(labelRazonSocial);
 		labelRazonSocial.setFont(new Font("Tahoma", Font.BOLD, 11));
-		panel_4.add(labelRazonSocial);
+		
+		JPanel panel_9 = new JPanel();
+		panel_4.add(panel_9, BorderLayout.EAST);
 		
 		entradaRazonSocial = new JTextField();
+		panel_9.add(entradaRazonSocial);
 		entradaRazonSocial.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -89,17 +97,23 @@ public class AnadirCliente extends JFrame {
 				limitarTamanoA30(e);
 			}
 		});
-		panel_4.add(entradaRazonSocial);
 		entradaRazonSocial.setColumns(15);
 		
 		JPanel panel_3 = new JPanel();
-		FlowLayout flowLayout_3 = (FlowLayout) panel_3.getLayout();
 		campos.add(panel_3);
+		panel_3.setLayout(new BorderLayout(0, 0));
+		
+		JPanel panel_10 = new JPanel();
+		panel_3.add(panel_10, BorderLayout.WEST);
 		
 		labelTelefono = new JLabel("Tel\u00E9fono");
-		panel_3.add(labelTelefono);
+		panel_10.add(labelTelefono);
+		
+		JPanel panel_11 = new JPanel();
+		panel_3.add(panel_11, BorderLayout.EAST);
 		
 		entradaTelefono = new JTextField();
+		panel_11.add(entradaTelefono);
 		entradaTelefono.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -107,17 +121,24 @@ public class AnadirCliente extends JFrame {
 				limitarTamanoA30(e);
 			}
 		});
-		panel_3.add(entradaTelefono);
 		entradaTelefono.setColumns(15);
 		
 		JPanel panel_5 = new JPanel();
-		FlowLayout flowLayout_2 = (FlowLayout) panel_5.getLayout();
 		campos.add(panel_5);
+		panel_5.setLayout(new BorderLayout(0, 0));
+		
+		JPanel panel_7 = new JPanel();
+		FlowLayout fl_panel_7 = (FlowLayout) panel_7.getLayout();
+		panel_5.add(panel_7, BorderLayout.WEST);
 		
 		labelCorreo = new JLabel("E-mail");
-		panel_5.add(labelCorreo);
+		panel_7.add(labelCorreo);
+		
+		JPanel panel_8 = new JPanel();
+		panel_5.add(panel_8, BorderLayout.EAST);
 		
 		entradaCorreo = new JTextField();
+		panel_8.add(entradaCorreo);
 		entradaCorreo.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -125,17 +146,23 @@ public class AnadirCliente extends JFrame {
 				limitarTamanoA30(e);
 			}
 		});
-		panel_5.add(entradaCorreo);
 		entradaCorreo.setColumns(15);
 		
 		JPanel panel_6 = new JPanel();
-		FlowLayout flowLayout_4 = (FlowLayout) panel_6.getLayout();
 		campos.add(panel_6);
+		panel_6.setLayout(new BorderLayout(0, 0));
+		
+		JPanel panel_12 = new JPanel();
+		panel_6.add(panel_12, BorderLayout.WEST);
 		
 		labelCuil = new JLabel("Cuil");
-		panel_6.add(labelCuil);
+		panel_12.add(labelCuil);
+		
+		JPanel panel_13 = new JPanel();
+		panel_6.add(panel_13, BorderLayout.EAST);
 		
 		entradaCuil = new JTextField();
+		panel_13.add(entradaCuil);
 		entradaCuil.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -143,7 +170,6 @@ public class AnadirCliente extends JFrame {
 				limitarTamanoA30(e);
 			}
 		});
-		panel_6.add(entradaCuil);
 		entradaCuil.setColumns(15);
 		
 		JPanel panel_2 = new JPanel();
@@ -202,6 +228,7 @@ public class AnadirCliente extends JFrame {
 		if(telefonoCorrecto && cuilCorrecto && emailCorrecto && razonSocialCorrecta) {
 			try {
 				statement.executeUpdate("INSERT INTO afweb_cliente values(null,'" +textoRazonSocial+ "','" +textoTelefono+ "'," + textoEmail + ",'" +textoCuil+ "')");
+				
 				labelGuardado.setVisible(true);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
