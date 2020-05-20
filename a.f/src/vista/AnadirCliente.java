@@ -3,13 +3,14 @@ package vista;
 import java.awt.BorderLayout;
 
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.border.TitledBorder;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+
 import java.awt.FlowLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
@@ -22,11 +23,12 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.BoxLayout;
 
-public class AnadirCliente extends JFrame {
+public class AnadirCliente extends JDialog {
 
 	private JPanel contentPane;
 	private JTextField entradaRazonSocial;
@@ -38,6 +40,7 @@ public class AnadirCliente extends JFrame {
 	private JLabel labelTelefono;
 	private JLabel labelCuil;
 	private JLabel labelGuardado;
+	private Connection conexion;
 
 
 
@@ -45,11 +48,14 @@ public class AnadirCliente extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AnadirCliente(Statement statement) {
+	public AnadirCliente(Connection conexion) {
+		this.conexion=conexion;
 		setTitle("A\u00F1adir Cliente");
+		setModal(true);
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
+				ocultarGuardado();
 				borrarDatos();
 			}
 		});
@@ -182,7 +188,8 @@ public class AnadirCliente extends JFrame {
 		guardar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				guardarDatos(statement);
+				guardarDatos();
+				
 			}
 		});
 		
@@ -196,7 +203,7 @@ public class AnadirCliente extends JFrame {
 	}
 	
 	
-	private void guardarDatos(Statement statement) {
+	private void guardarDatos() {
 		// guardando datos
 		String textoTelefono= entradaTelefono.getText();
 		String textoCuil=entradaCuil.getText();
@@ -227,17 +234,19 @@ public class AnadirCliente extends JFrame {
 		
 		if(telefonoCorrecto && cuilCorrecto && emailCorrecto && razonSocialCorrecta) {
 			try {
+				Statement statement= conexion.createStatement();
 				statement.executeUpdate("INSERT INTO afweb_cliente values(null,'" +textoRazonSocial+ "','" +textoTelefono+ "'," + textoEmail + ",'" +textoCuil+ "')");
-				
+				statement.close();
 				labelGuardado.setVisible(true);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				JOptionPane.showMessageDialog(this,"El cliente \""+textoRazonSocial+"\" ya esta registrado.");
+				JOptionPane.showMessageDialog(this, "El cliente \""+textoRazonSocial+"\" ya esta registrado.", "Error", 2);
 				//e.printStackTrace();
 			}
 			
 			borrarDatos();
 		}else {
+			
 			// cambio los colores de los label en caso de que  algun dato sea incorrecto
 			
 			if(!telefonoCorrecto) {
@@ -281,7 +290,7 @@ public class AnadirCliente extends JFrame {
 		if(((JTextField)e.getSource()).getText().length()==30) e.consume();
 	}
 	private void borrarDatos() {
-
+	
 		// borro los input
 		entradaCorreo.setText("");
 		entradaCuil.setText("");
@@ -298,6 +307,7 @@ public class AnadirCliente extends JFrame {
 		labelCorreo.setForeground(Color.BLACK);
 		labelRazonSocial.setForeground(Color.BLACK);
 		
+		entradaRazonSocial.requestFocus();
 		
 	}
 

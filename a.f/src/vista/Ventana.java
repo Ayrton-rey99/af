@@ -17,6 +17,7 @@ import javax.swing.JMenuItem;
 import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
 import java.sql.Statement;
 
 public class Ventana extends JFrame {
@@ -58,8 +59,8 @@ public class Ventana extends JFrame {
 	 */
 	public Ventana() {
 		//
-		Conexion conexion=new Conexion();
-		Statement statement= conexion.getDeclaracion();
+		Conexion conex=new Conexion();
+		Connection conexion= conex.getConexion();
 		//
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -93,10 +94,13 @@ public class Ventana extends JFrame {
 		setContentPane(contentPane);
 		
 		// gestionadores
-		gestionaClientes=new GestionaClientes(statement);
+		gestionaClientes=new GestionaClientes(conexion);
 		gestionaClientes.setVisible(false);
 		contentPane.add(gestionaClientes);
 		//
+		
+	}
+	public void prueba() {
 		
 	}
 

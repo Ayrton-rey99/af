@@ -8,13 +8,12 @@ import java.sql.Statement;
 import javax.swing.JOptionPane;
 
 public class Conexion {
-	private  Statement declaracion;
+	private  Connection conexion;
 	
 	public Conexion() {
 		
 		try {
-			Connection conexion=DriverManager.getConnection("jdbc:mysql://localhost:3306/af", "root", "");
-			declaracion = conexion.createStatement();
+			 conexion=DriverManager.getConnection("jdbc:mysql://localhost:3306/af", "root", "");
 			
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, "Error al conectar a la base de datos");
@@ -22,8 +21,8 @@ public class Conexion {
 		}
 	}
 	
-	public Statement getDeclaracion() {
-		return declaracion;
+	public Connection getConexion() {
+		return conexion;
 		
 	}
 		
