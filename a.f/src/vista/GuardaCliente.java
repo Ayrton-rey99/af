@@ -28,7 +28,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.BoxLayout;
 
-public class AnadirCliente extends JDialog {
+public class GuardaCliente extends JDialog {
 
 	private JPanel contentPane;
 	private JTextField entradaRazonSocial;
@@ -41,16 +41,17 @@ public class AnadirCliente extends JDialog {
 	private JLabel labelCuil;
 	private JLabel labelGuardado;
 	private Connection conexion;
-
-
+	private int idRegistro;
+	private boolean anadir;
 
 
 	/**
 	 * Create the frame.
 	 */
-	public AnadirCliente(Connection conexion) {
+	public GuardaCliente(Connection conexion) {
 		this.conexion=conexion;
-		setTitle("A\u00F1adir Cliente");
+	
+		
 		setModal(true);
 		addWindowListener(new WindowAdapter() {
 			@Override
@@ -59,7 +60,6 @@ public class AnadirCliente extends JDialog {
 				borrarDatos();
 			}
 		});
-		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setSize(360, 360);
 		setResizable(false);
@@ -198,7 +198,7 @@ public class AnadirCliente extends JDialog {
 		labelGuardado.setFont(new Font("Tahoma", Font.BOLD, 11));
 		labelGuardado.setForeground(new Color(0, 128, 0));
 		panel_2.add(labelGuardado);
-		guardar.setIcon(new ImageIcon(AnadirCliente.class.getResource("/imagenes/anadirCliente.gif")));
+		guardar.setIcon(new ImageIcon(GuardaCliente.class.getResource("/imagenes/anadirCliente.gif")));
 		panel_2.add(guardar);
 	}
 	
@@ -235,7 +235,11 @@ public class AnadirCliente extends JDialog {
 		if(telefonoCorrecto && cuilCorrecto && emailCorrecto && razonSocialCorrecta) {
 			try {
 				Statement statement= conexion.createStatement();
-				statement.executeUpdate("INSERT INTO afweb_cliente values(null,'" +textoRazonSocial+ "','" +textoTelefono+ "'," + textoEmail + ",'" +textoCuil+ "')");
+				if(anadir) {
+					statement.executeUpdate("INSERT INTO afweb_cliente values(null,'" +textoRazonSocial+ "','" +textoTelefono+ "'," + textoEmail + ",'" +textoCuil+ "')");
+				}else {
+					statement.executeUpdate("update afweb_cliente set razon_social='"+textoRazonSocial+"', telefono='"+textoTelefono+"', email="+textoEmail+", cuil='"+textoCuil+"' where id="+idRegistro);
+				}
 				statement.close();
 				labelGuardado.setVisible(true);
 			} catch (SQLException e) {
@@ -249,17 +253,11 @@ public class AnadirCliente extends JDialog {
 			
 			// cambio los colores de los label en caso de que  algun dato sea incorrecto
 			
-			if(!telefonoCorrecto) {
-				labelTelefono.setForeground(Color.RED);
-				labelTelefono.setText("Teléfono (incorrecto)");
-			}else {
-				labelTelefono.setText("Teléfono");
-				labelTelefono.setForeground(Color.BLACK);
-				
-			}
+
 			if(!cuilCorrecto) {
 				labelCuil.setForeground(Color.RED);
 				labelCuil.setText("cuil (incorrecto)");
+				entradaCuil.requestFocus();
 			}else {
 				labelCuil.setText("cuil");
 				labelCuil.setForeground(Color.BLACK);
@@ -267,13 +265,23 @@ public class AnadirCliente extends JDialog {
 			if(!emailCorrecto) {
 				labelCorreo.setForeground(Color.RED);
 				labelCorreo.setText("E-mail (incorrecto)");
+				entradaCorreo.requestFocus();
 			}else {
 				labelCorreo.setText("E-mail");
 				labelCorreo.setForeground(Color.BLACK);
 			}
+			if(!telefonoCorrecto) {
+				labelTelefono.setForeground(Color.RED);
+				labelTelefono.setText("Teléfono (incorrecto)");
+				entradaTelefono.requestFocus();
+			}else {
+				labelTelefono.setText("Teléfono");
+				labelTelefono.setForeground(Color.BLACK);
+			}
 			if(!razonSocialCorrecta) {
 				labelRazonSocial.setForeground(Color.RED);
 				labelRazonSocial.setText("Razón social (incorrecto)");
+				entradaRazonSocial.requestFocus();
 			}else {
 				labelRazonSocial.setText("Razón social");
 				labelRazonSocial.setForeground(Color.BLACK);
@@ -283,6 +291,7 @@ public class AnadirCliente extends JDialog {
 		
 		
 	}
+
 	private void ocultarGuardado() {
 		if(labelGuardado.isVisible()) labelGuardado.setVisible(false);
 	}
@@ -292,10 +301,12 @@ public class AnadirCliente extends JDialog {
 	private void borrarDatos() {
 	
 		// borro los input
-		entradaCorreo.setText("");
-		entradaCuil.setText("");
-		entradaRazonSocial.setText("");
-		entradaTelefono.setText("");
+		if(anadir) {
+			entradaCorreo.setText("");
+			entradaCuil.setText("");
+			entradaRazonSocial.setText("");
+			entradaTelefono.setText("");
+		}
 		// restablezco los label
 		labelTelefono.setText("Teléfono");
 		labelCuil.setText("cuil");
@@ -310,9 +321,35 @@ public class AnadirCliente extends JDialog {
 		entradaRazonSocial.requestFocus();
 		
 	}
-
+	public void actulizar(int idRegistro, String razonSocial,String telefono, String correo, String cuil) {
+		// pongo los valores en label
+		entradaTelefono.setText(telefono);
+		entradaCuil.setText(cuil);
+		entradaCorreo.setText(correo);
+		entradaRazonSocial.setText(razonSocial);
+		
+		this.idRegistro=idRegistro;
+		this.setTitle("Editar Cliente: " + idRegistro);
+		anadir=false;
+		this.setVisible(true);
+		
+	}
+	public void anadir() {
+		this.setTitle("Añadir Cliente");
+		anadir=true;
+		
+		// borro los input
+		entradaCorreo.setText("");
+		entradaCuil.setText("");
+		entradaRazonSocial.setText("");
+		entradaTelefono.setText("");
+		
+		this.setVisible(true);
+		
+	}
 
 }
+
 
 
 

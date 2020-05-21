@@ -12,7 +12,10 @@ import javax.swing.BoxLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
+import com.sun.org.apache.xml.internal.security.signature.Reference;
 import com.sun.pisces.PiscesRenderer;
 
 import java.awt.FlowLayout;
@@ -31,11 +34,13 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class GestionaClientes extends JPanel {
 	private JTable tabla;
-	private JTextField textField;
-	private AnadirCliente anadirCliente;
+	private JTextField entradaBusqueda;
+	private GuardaCliente guardaCliente;
 	private JPanel paginacion;
 	private Connection conexion;
 	private JPanel panel;
@@ -52,6 +57,7 @@ public class GestionaClientes extends JPanel {
 	private JButton botonUltimo;
 	private JLabel labelCantidadRegistros;
 	private DefaultTableModel modeloTabla;
+	private boolean mostrandoResultadosDeBusqueda;
 
 	/**
 	 * Create the panel.
@@ -59,7 +65,7 @@ public class GestionaClientes extends JPanel {
 	public GestionaClientes(Connection conexion) {
 		//
 		this.conexion = conexion;
-		anadirCliente = new AnadirCliente(conexion);
+		guardaCliente = new GuardaCliente(conexion);
 		//
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -83,10 +89,10 @@ public class GestionaClientes extends JPanel {
 		JLabel lblNewLabel_1 = new JLabel("Buscar por:");
 		panel_6.add(lblNewLabel_1);
 
-		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.setModel(new DefaultComboBoxModel<String>(
+		JComboBox<String> busquedaPor = new JComboBox<String>();
+		busquedaPor.setModel(new DefaultComboBoxModel<String>(
 				new String[] { "id", "Raz\u00F3n social", "Tel\u00E9fono", "E-mail", "Cuil" }));
-		panel_6.add(comboBox);
+		panel_6.add(busquedaPor);
 
 		JPanel panel_7 = new JPanel();
 		FlowLayout flowLayout_4 = (FlowLayout) panel_7.getLayout();
@@ -96,13 +102,101 @@ public class GestionaClientes extends JPanel {
 		JLabel lblNewLabel = new JLabel("Buscar");
 		panel_7.add(lblNewLabel);
 
-		textField = new JTextField();
-		panel_7.add(textField);
-		textField.setColumns(15);
+		entradaBusqueda = new JTextField();
+		entradaBusqueda.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if(mostrandoResultadosDeBusqueda && entradaBusqueda.getText().equals("")) {
+					refrescarTabla();
+					entradaBusqueda.requestFocus();
+				}
+			}
+		});
+		panel_7.add(entradaBusqueda);
+		entradaBusqueda.setColumns(15);
 
-		JButton btnNewButton_8 = new JButton("");
-		panel_7.add(btnNewButton_8);
-		btnNewButton_8.setIcon(new ImageIcon(GestionaClientes.class.getResource("/imagenes/buscar.gif")));
+		JButton botonBusqueda = new JButton("");
+		botonBusqueda.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				String buscarPor=(String)busquedaPor.getSelectedItem();
+				String textoBusqueda=entradaBusqueda.getText();
+			if(!(textoBusqueda.equals(""))) {
+					
+				
+				try {
+					
+						ResultSet resultSet = null;
+						Statement statement = null;
+						switch (buscarPor) {
+						case "id":
+							statement=conexion.prepareStatement("SELECT * FROM afweb_cliente WHERE id ='" + textoBusqueda+"';",ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+							resultSet=statement.executeQuery("SELECT * FROM afweb_cliente WHERE id ='" + textoBusqueda+"';");
+							break;
+						case "Razón social":
+							statement=conexion.prepareStatement("SELECT * FROM afweb_cliente WHERE razon_social LIKE '%"+textoBusqueda+"%';",ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+							resultSet=statement.executeQuery("SELECT * FROM afweb_cliente WHERE razon_social LIKE '%"+textoBusqueda+"%';");
+							break;
+						case "Teléfono":
+							statement=conexion.prepareStatement("select * from afweb_cliente where telefono='"+textoBusqueda+"';",ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+							resultSet=statement.executeQuery("select * from afweb_cliente where telefono='"+textoBusqueda+"';");
+							break;
+						case "E-mail":
+							statement=conexion.prepareStatement("SELECT * FROM afweb_cliente WHERE email LIKE '%"+textoBusqueda+"%';",ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+							resultSet=statement.executeQuery("SELECT * FROM afweb_cliente WHERE email LIKE '%"+textoBusqueda+"%';");
+							break;
+						case "Cuil":
+							statement=conexion.prepareStatement("select * from afweb_cliente where cuil='" + textoBusqueda+"';",ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+							resultSet=statement.executeQuery("select * from afweb_cliente where cuil='" + textoBusqueda+"';");
+							break;
+						default:
+							break;
+						}
+						// obtengo la cantidad de filas del resulset
+						int cantidadDeFilas=0;
+						while (resultSet.next()) cantidadDeFilas++;
+						// me posiciono antes de la primera posicion
+						resultSet.beforeFirst();
+						// creo el array que se va a usar para el modelo de la tabla
+						String[][] filasDeTabla = new String[cantidadDeFilas][5];
+						// obtengo los siguientes valores
+						for (int j = 0; j < cantidadDeFilas; j++) {
+							if (resultSet.next()) {
+								filasDeTabla[j][0] = resultSet.getString("id");
+								filasDeTabla[j][1] = resultSet.getString("razon_social");
+								filasDeTabla[j][2] = resultSet.getString("telefono");
+								filasDeTabla[j][3] = resultSet.getString("email");
+								filasDeTabla[j][4] = resultSet.getString("cuil");
+							} 
+						}
+						resultSet.close();
+						statement.close();
+						
+						// añado el nuevo modelo a la tabla
+						modeloTabla= new DefaultTableModel(filasDeTabla,new String[] { "id", "Razón social", "Teléfono", "E-mail", "Cuil" }) {
+							@Override
+							public boolean isCellEditable(int row, int column) {
+								// TODO Auto-generated method stub
+								return false;
+							}
+
+						};
+				
+						tabla.setModel(modeloTabla);
+						mostrandoResultadosDeBusqueda=true;
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}else {
+				JOptionPane.showMessageDialog(GestionaClientes.this, "Completa el campo de busqueda", "Error", 2);
+			}
+
+
+			}
+		});
+		panel_7.add(botonBusqueda);
+		botonBusqueda.setIcon(new ImageIcon(GestionaClientes.class.getResource("/imagenes/buscar.gif")));
 
 		JPanel panel_2 = new JPanel();
 		panel_5.add(panel_2);
@@ -114,8 +208,8 @@ public class GestionaClientes extends JPanel {
 		botonAnadir.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				anadirCliente.setLocationRelativeTo(GestionaClientes.this);
-				anadirCliente.setVisible(true);
+				guardaCliente.setLocationRelativeTo(GestionaClientes.this);
+				guardaCliente.anadir();
 				refrescarTabla();
 
 			}
@@ -123,9 +217,26 @@ public class GestionaClientes extends JPanel {
 		botonAnadir.setIcon(new ImageIcon(GestionaClientes.class.getResource("/imagenes/anadir.gif")));
 		panel_2.add(botonAnadir);
 
-		JButton btnNewButton = new JButton("Editar");
-		btnNewButton.setIcon(new ImageIcon(GestionaClientes.class.getResource("/imagenes/editar.gif")));
-		panel_2.add(btnNewButton);
+		JButton botonEditar = new JButton("Editar");
+		botonEditar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				int[] filasSeleccionadas=tabla.getSelectedRows();
+				if(filasSeleccionadas.length==1) {
+					guardaCliente.setLocationRelativeTo(GestionaClientes.this);
+					guardaCliente.actulizar(Integer.parseInt(((String)tabla.getValueAt(filasSeleccionadas[0], 0))), ((String)tabla.getValueAt(filasSeleccionadas[0], 1)), ((String)tabla.getValueAt(filasSeleccionadas[0], 2)), ((String)tabla.getValueAt(filasSeleccionadas[0], 3)), ((String)tabla.getValueAt(filasSeleccionadas[0], 4)));
+					refrescarTabla();
+				}else if(filasSeleccionadas.length==0) {
+					JOptionPane.showMessageDialog(GestionaClientes.this, "Selecciona una fila", "Error", 2);
+				}else {
+					JOptionPane.showMessageDialog(GestionaClientes.this, "Selecciona solo una fila", "Error", 2);
+				}
+				
+				
+			}
+		});
+		botonEditar.setIcon(new ImageIcon(GestionaClientes.class.getResource("/imagenes/editar.gif")));
+		panel_2.add(botonEditar);
 
 		JButton botonEliminar = new JButton("Eliminar");
 		botonEliminar.addMouseListener(new MouseAdapter() {
@@ -365,7 +476,7 @@ public class GestionaClientes extends JPanel {
 	}
 
 	public void traerDatos(Integer numeroDePagina) {
-
+		mostrandoResultadosDeBusqueda=false;
 		try {
 			Statement statement = conexion.prepareStatement("select * from afweb_cliente",
 					ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -391,9 +502,7 @@ public class GestionaClientes extends JPanel {
 					filasDeTabla[j][2] = resulset.getString("telefono");
 					filasDeTabla[j][3] = resulset.getString("email");
 					filasDeTabla[j][4] = resulset.getString("cuil");
-				} else {
-					break; // si no hay mas registros termino el bucle para no recorrelo en vano
-				}
+				} 
 			}
 			statement.close();
 			resulset.close(); // cierro el resulset para ahorrar recursos
@@ -404,7 +513,9 @@ public class GestionaClientes extends JPanel {
 					// TODO Auto-generated method stub
 					return false;
 				}
+
 			};
+	
 			tabla.setModel(modeloTabla);
 
 		} catch (SQLException e) {
@@ -422,7 +533,6 @@ public class GestionaClientes extends JPanel {
 			traerDatos(numeroDePagina);
 		}
 	}
-
 	private void refrescarTabla() {
 		int numeroDePagina = Integer.parseInt(botonActual.getText());
 		traerDatos(numeroDePagina);
